@@ -1,18 +1,22 @@
 // DOM Elements
+var gameDOM = document.getElementById('game');
 var winsDOM = document.getElementById('wins');
 var lossesDOM = document.getElementById('losses');
-var computerGuessDOM = document.getElementById('computerGuess');
+var computerGuessDOM = document.getElementById('computer-guess');
 var userGuessDOM = document.getElementById('userGuess');
 var remainingDOM = document.getElementById('remaining');
+var updateDOM = document.getElementById('update-text');
 var winBlocDOM = document.getElementById('win-bloc-guess');
 
 var wins = 0;
 var losses = 0;
 var remaining = 9;
+var round = 0;
 var str = "abcdefghijklmnopqrstuvwxyz";
 var keys = str.split("");
 var computerGuess
-var round = 0;
+var userGuessArr = [];
+
 
 
 //visual cues for wins, losses, and quesses
@@ -20,17 +24,17 @@ var round = 0;
 //alert to repeate letter guess
 //visual hints
 
-hide('game');
-var gameInit = function () {
+
+function gameInit() {
     show('game');
-    show('stats-bloc');
+    show('stats');
     hide('start');
-    hide('win-bloc');
-    hide('loss-bloc');
+    hide('update');
     computerGuessDOM.textContent = '';
-    round++;
     computerGuess = keys[Math.floor(Math.random() * keys.length)];
+    round++;
     remaining = 9;
+    userGuessArr = [];
     remainingDOM.textContent = remaining;
     userGuessDOM.textContent = '';
     console.log('shhh... the computer guessed ' + computerGuess);
@@ -46,6 +50,8 @@ function hide(hide) {
     hide.style.display = 'none';
 }
 
+hide('game');
+
 if (gameInit) {
 
     document.onkeyup = function (event) {
@@ -54,26 +60,38 @@ if (gameInit) {
 
         if (keys.indexOf(userGuess) !== -1) {
 
-            userGuessDOM.insertAdjacentText('beforeend', userGuess + ', ');
-            console.log(userGuess);
+            if (!userGuessArr.includes(userGuess)) {
 
-            if (userGuess === computerGuess) {
-                winBlocDOM.textContent = userGuess;
-                wins++;
-                winsDOM.textContent = wins;
-                show('win-bloc');
-                hide('stats-bloc');
+                userGuessArr.push(userGuess);
+                userGuessDOM.insertAdjacentText('beforeend', userGuess + ', ');
+
+                if (userGuess === computerGuess) {
+                    wins++;
+                    winsDOM.textContent = wins;
+                    updateDOM.textContent = ' You guessed it! The letter was ' + computerGuess;
+                    show('update');
+                    hide('stats');
+                } else {
+                    remaining--;
+                    remainingDOM.textContent = remaining;
+                }
+
+                if (remaining === 0) {
+                    computerGuessDOM.textContent = computerGuess;
+                    hide('stats');
+                    updateDOM.textContent = 'Sorry, the computer was thinking ' + computerGuess + '.';
+                    show('update');
+                    losses++;
+                    lossesDOM.textContent = losses;
+                }
             } else {
-                remaining--;
-                remainingDOM.textContent = remaining;
-            }
+                console.log('you guessed that already');
+                gameDOM.classList.add('shake');
 
-            if (remaining === 0) {
-                computerGuessDOM.textContent = computerGuess;
-                hide('stats-bloc');
-                show('loss-bloc');
-                losses++;
-                lossesDOM.textContent = losses;
+                document.addEventListener("animationend", function (event) {
+                    gameDOM.classList.remove("shake");
+                });
+
             }
         }
     }
