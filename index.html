@@ -14,7 +14,7 @@
 
 <body>
     <div class="container">
-        <div class="row">
+        <div id="window" class="row">
             <div class="col-lg-12">
 
                 <div id="start" class="align-middle">
@@ -24,7 +24,7 @@
                 </div>
 
                 <div id="game">
-                    <div id="stats-bloc">
+                    <div id="stats">
                         <p>Wins: <span id="wins">0</span></p>
                         <p>Losses: <span id="losses">0</span></p>
                         <p>Guesses Left: <span id="remaining">0</span></p>
@@ -39,18 +39,10 @@
                         </div>
                     </div>
 
-                    <div id="loss-bloc" class="hide">
-                        <p>Sorry, the computer was thinking <span id="computerGuess"></span></p>
+                    <div id="update" class="hide">
+                        <p id="update-text">Sorry, the computer was thinking <span id="computer-guess"></span></p>
                         <button onclick="gameInit()" class="btn btn-outline-info">Try Again</button>
                     </div>
-
-                    <div id="win-bloc" class="hide">
-                        <p><span id="win-bloc-guess"></span></p>
-                        <p>You guessed it!</p>
-                        <button onclick="gameInit()" class="btn btn-outline-info">Try Again</button>
-                    </div>
-
-
 
                 </div>
 
